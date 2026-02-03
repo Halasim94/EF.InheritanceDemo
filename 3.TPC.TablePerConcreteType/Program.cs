@@ -198,11 +198,13 @@ Console.WriteLine("════════════════════�
 Console.WriteLine("TPC: Inserts only into the specific concrete table");
 Console.WriteLine();
 
+// Add cars and trucks separately using different contexts to avoid Id conflicts
 using (var context = new VehicleDbContext(connectionString))
 {
     // Add a new car - inserts ONLY into Cars table
     var newCar = new Car
     {
+        // Note: No Id specified - let EF Core generate unique IDs across all tables
         Brand = "Renault",
         Model = "Clio",
         Year = 2024,
@@ -211,7 +213,6 @@ using (var context = new VehicleDbContext(connectionString))
         FuelType = "Diesel"
     };
 
-    // Add a new truck - inserts ONLY into Trucks table
     var newTruck = new Truck
     {
         Brand = "DAF",
@@ -222,13 +223,12 @@ using (var context = new VehicleDbContext(connectionString))
         NumberOfAxles = 3
     };
 
-    context.Vehicles.AddRange(newCar, newTruck);
+    await context.Vehicles.AddRangeAsync(newCar, newTruck);
     await context.SaveChangesAsync();
-
-    Console.WriteLine("✅ Added new vehicles (single table per entity):");
+    
+    Console.WriteLine("✅ Added new car:");
     Console.WriteLine($"  • {newCar.GetDescription()}");
     Console.WriteLine($"    → INSERT INTO Cars (Id, Brand, Model, Year, Price, NumberOfDoors, FuelType)");
-    Console.WriteLine();
     Console.WriteLine($"  • {newTruck.GetDescription()}");
     Console.WriteLine($"    → INSERT INTO Trucks (Id, Brand, Model, Year, Price, LoadCapacity, NumberOfAxles)");
 }

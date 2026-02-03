@@ -148,6 +148,10 @@ public class VehicleDbContext : DbContext
         // Configure Car-specific properties
         modelBuilder.Entity<Car>(entity =>
         {
+            // Configure Id for auto-generation
+            entity.Property(c => c.Id)
+                .ValueGeneratedOnAdd();
+
             // Car properties - can be NOT NULL at database level
             entity.Property(c => c.NumberOfDoors)
                 .IsRequired();
@@ -160,6 +164,10 @@ public class VehicleDbContext : DbContext
         // Configure Motorcycle-specific properties
         modelBuilder.Entity<Motorcycle>(entity =>
         {
+            // Configure Id for auto-generation
+            entity.Property(m => m.Id)
+                .ValueGeneratedOnAdd();
+
             entity.Property(m => m.HasSidecar)
                 .IsRequired();
 
@@ -170,6 +178,10 @@ public class VehicleDbContext : DbContext
         // Configure Truck-specific properties
         modelBuilder.Entity<Truck>(entity =>
         {
+            // Configure Id for auto-generation
+            entity.Property(t => t.Id)
+                .ValueGeneratedOnAdd();
+
             entity.Property(t => t.LoadCapacity)
                 .IsRequired()
                 .HasPrecision(10, 2);
